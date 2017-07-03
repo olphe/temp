@@ -2,6 +2,7 @@ class Segment_Tree {
 	vector<long long int>v;
 	vector<int>l;
 	vector<int>r;
+	int num;
 	long long int ret;
 	bool is_min;
 	long long int Update(int place) {
@@ -47,7 +48,11 @@ public:
 		r[place] = r[place * 2 + 1];
 		return;
 	}
-	Segment_Tree(int num, bool min) {
+	Segment_Tree(int n, bool min) {
+		num = 1;
+		while (num < n * 2) {
+			num *= 2;
+		}
 		l.resize(num);
 		r.resize(num);
 		if (min) {
