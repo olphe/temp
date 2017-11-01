@@ -1,7 +1,5 @@
 list<int> Prime(int num) {
 	list<int>P;
-	P.push_back(2);
-	P.push_back(3);
 	for (int i = 5; i <= num; i += 6) {
 		bool flag = true;
 		for (auto j : P) {
@@ -26,5 +24,7 @@ list<int> Prime(int num) {
 		}
 		if (flag)P.push_back(i + 2);
 	}
+	P.push_front(3);
+	P.push_front(2);
 	return P;
 }
