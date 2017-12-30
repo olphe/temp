@@ -42,9 +42,10 @@ public:
 		r[place] = r[place * 2 + 1];
 		return;
 	}
-	Add_Segment_Tree(int N) {
+	Add_Segment_Tree(int n) {
+		n++;
 		num = 1;
-		while (num < N * 2)num *= 2;
+		while (num < n * 2)num *= 2;
 		l.resize(num);
 		r.resize(num);
 		v.resize(num, 0);

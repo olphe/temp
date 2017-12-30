@@ -49,6 +49,7 @@ public:
 		return;
 	}
 	Segment_Tree(int n, bool min) {
+		n++;
 		num = 1;
 		while (num < n * 2) {
 			num *= 2;
