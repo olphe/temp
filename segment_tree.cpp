@@ -56,9 +56,9 @@ public:
 		}
 		l.resize(num);
 		r.resize(num);
+		is_min = min;
 		if (min) {
 			v.resize(num, LLONG_MAX);
-			is_min = true;
 		}
 		else v.resize(num, LLONG_MIN);
 		Left(1);
