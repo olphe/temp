@@ -58,9 +58,9 @@ public:
 		r.resize(num);
 		is_min = min;
 		if (min) {
-			v.resize(num, LLONG_MAX);
+			v.resize(num, MOD*MOD);
 		}
-		else v.resize(num, LLONG_MIN);
+		else v.resize(num, -MOD*MOD);
 		Left(1);
 		Right(1);
 	}
