@@ -7,21 +7,28 @@ public:
 
 class Dinic {
 	int V;
+	bool directed;
 public:
 	vector<vector<Edge>>edge;
 	vector<int>depth;
 	vector<int>index;
-	Dinic(int n) {
+	Dinic(int n,bool D) {
 		n++;
 		V = n;
 		edge.resize(V);
 		depth.resize(V);
 		index.resize(V);
+		directed = D;
 		return;
 	}
 	void Add_Edge(int l, int r, int max_flow) {
 		edge[l].push_back({ r,max_flow,(int)edge[r].size() });
-		edge[r].push_back({ l,max_flow,(int)edge[l].size() - 1 });
+		if (directed) {
+			edge[r].push_back({ l,0,(int)edge[l].size() - 1 });
+		}
+		else {
+			edge[r].push_back({ l,max_flow,(int)edge[l].size() - 1 });
+		}
 		return;
 	}
 	void Check_Depth(int s) {

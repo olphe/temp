@@ -1,14 +1,21 @@
 class Lowest_Common_Ancestor {
 	vector<int>depth;
-	vector<int>parent[25];
-	list<int>edge[1000001];
+	vector<vector<int>>parent;
+	vector<vector<int>>edge;
+	int height = 0;
 	int node;
 public:
 	Lowest_Common_Ancestor(int num) {
-		node = num;
 		num++;
-		depth.resize(num);
-		for (int i = 0; i < 25; i++)parent[i].resize(num);
+		node = num;
+		while (num) {
+			height++;
+			num /= 2;
+		}
+		parent.resize(height);
+		edge.resize(node);
+		depth.resize(node);
+		for (int i = 0; i < height; i++)parent[i].resize(node);
 	}
 	void Add_Edge(int a, int b) {
 		edge[a].push_back(b);
@@ -17,9 +24,9 @@ public:
 	}
 	void Update() {
 		queue<int>QQ;
-		depth[1] = 0;
-		for (int i = 2; i <= node; i++) depth[i] = INT_MAX;
-		QQ.push(1);
+		depth[0] = 0;
+		for (int i = 1; i < node; i++) depth[i] = INT_MAX;
+		QQ.push(0);
 		while (!QQ.empty()) {
 			int c = QQ.front();
 			for (auto i : edge[c]) {
@@ -30,8 +37,8 @@ public:
 			}
 			QQ.pop();
 		}
-		parent[0][1] = -1;
-		for (int i = 2; i <= node; i++) {
+		parent[0][0] = -1;
+		for (int i = 1; i < node; i++) {
 			for (auto j : edge[i]) {
 				if (depth[i] - 1 == depth[j]) {
 					parent[0][i] = j;
@@ -39,8 +46,8 @@ public:
 				}
 			}
 		}
-		for (int i = 0; i < 24; i++) {
-			for (int j = 1; j <= node; j++) {
+		for (int i = 0; i < height - 1; i++) {
+			for (int j = 0; j < node; j++) {
 				if (parent[i][j] < 0)parent[i + 1][j] = -1;
 				else parent[i + 1][j] = parent[i][parent[i][j]];
 			}
@@ -49,13 +56,13 @@ public:
 	}
 	int LCA(int u, int v) {
 		if (depth[u] > depth[v])swap(u, v);
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < height; i++) {
 			if ((depth[v] - depth[u]) >> i & 1) {
 				v = parent[i][v];
 			}
 		}
 		if (u == v)return u;
-		for (int i = 24; i >= 0; i--) {
+		for (int i = height - 1; i >= 0; i--) {
 			if (parent[i][v] != parent[i][u]) {
 				u = parent[i][u];
 				v = parent[i][v];
