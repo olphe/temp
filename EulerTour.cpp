@@ -1,3 +1,4 @@
+
 class EulerTour {	//	0-indexed
 public:
 	vector<int>tour;
@@ -18,23 +19,8 @@ private:
 		tour.push_back(n);
 		return;
 	}
-public:
-	EulerTour(int n, int ro) {
-		node++;
-		node = n;
-		root = ro;
-		edge.resize(node);
-		depth.resize(node, MOD);
-		l.resize(node, MOD);
-		r.resize(node, 0);
-		return;
-	}
-	void Add_Edge(int a, int b) {
-		edge[a].push_back(b);
-		edge[b].push_back(a);
-		return;
-	}
 	void BFS() {
+		for (auto &i : depth)i = MOD;
 		depth[root] = 0;
 		queue<int>Q;
 		Q.push(root);
@@ -51,7 +37,25 @@ public:
 		}
 		return;
 	}
+public:
+	EulerTour(int n, int ro) {
+		node = n;
+		node++;
+		root = ro;
+		edge.resize(node);
+		depth.resize(node, MOD);
+		l.resize(node, MOD);
+		r.resize(node, 0);
+		return;
+	}
+	void Add_Edge(int a, int b) {
+		edge[a].push_back(b);
+		edge[b].push_back(a);
+		return;
+	}
 	void Retour() {
+		if (!tour.empty())tour.clear();
+		BFS();
 		DFS(root);
 		for (int i = 0; i < tour.size(); i++) {
 			l[tour[i]] = min(l[tour[i]], i);
