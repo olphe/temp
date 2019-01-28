@@ -22,11 +22,11 @@ public:
 		edge[b].push_back(a);
 		return;
 	}
-	void Update() {
+	void Update(int rtnode) {
 		queue<int>QQ;
-		depth[0] = 0;
+		depth[rtnode] = 0;
 		for (int i = 1; i < node; i++) depth[i] = INT_MAX;
-		QQ.push(0);
+		QQ.push(rtnode);
 		while (!QQ.empty()) {
 			int c = QQ.front();
 			for (auto i : edge[c]) {
@@ -37,7 +37,7 @@ public:
 			}
 			QQ.pop();
 		}
-		parent[0][0] = -1;
+		parent[0][rtnode] = -1;
 		for (int i = 1; i < node; i++) {
 			for (auto j : edge[i]) {
 				if (depth[i] - 1 == depth[j]) {
