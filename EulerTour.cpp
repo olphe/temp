@@ -59,7 +59,7 @@ public:
 		DFS(root);
 		for (int i = 0; i < tour.size(); i++) {
 			l[tour[i]] = min(l[tour[i]], i);
-			r[tour[i]] = min(r[tour[i]], i);
+			r[tour[i]] = max(r[tour[i]], i);
 		}
 		return;
 	}
