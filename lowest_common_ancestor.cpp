@@ -24,8 +24,8 @@ public:
 	}
 	void Update(int rtnode) {
 		queue<int>QQ;
+		for (int i = 0; i < node; i++) depth[i] = INT_MAX;
 		depth[rtnode] = 0;
-		for (int i = 1; i < node; i++) depth[i] = INT_MAX;
 		QQ.push(rtnode);
 		while (!QQ.empty()) {
 			int c = QQ.front();
