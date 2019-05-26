@@ -10,4 +10,5 @@ long long int power(long long int x, long long int n, long long int M) {
 		by %= M;
 		n >>= 1;
 	}
+	return ret;
 }
