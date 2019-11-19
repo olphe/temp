@@ -10,9 +10,9 @@ private:
 	vector<vector<int>>edge;
 	int root = 0;
 	void DFS(int n) {
+		tour.push_back(n);
 		for (auto i : edge[n]) {
 			if (depth[n] < depth[i]) {
-				tour.push_back(n);
 				DFS(i);
 			}
 		}
