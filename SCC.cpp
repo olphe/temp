@@ -1,4 +1,4 @@
-struct StronglyConnectedComponents {//Ž©ŒÈ•Ó‚ ‚è
+struct StronglyConnectedComponents {// can loop 
 	vector<vector<int>>new_edge;
 	StronglyConnectedComponents(const vector<vector<int>>&edge) {
 		Initialize(edge);

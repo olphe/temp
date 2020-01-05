@@ -38,7 +38,7 @@ public:
 			QQ.pop();
 		}
 		parent[0][rtnode] = -1;
-		for (int i = 1; i < node; i++) {
+		for (int i = 0; i < node; i++) {
 			for (auto j : edge[i]) {
 				if (depth[i] - 1 == depth[j]) {
 					parent[0][i] = j;
