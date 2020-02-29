@@ -1,7 +1,5 @@
 class Segment_Tree {
 	vector<long long int>v;
-	vector<int>l;
-	vector<int>r;
 	int num;
 	long long int ret;
 	bool is_min;
@@ -16,53 +14,18 @@ class Segment_Tree {
 		v[place] = max(Update(place * 2), Update(place * 2 + 1));
 		return v[place];
 	}
-	void RMQ(int a, int b, int place) {
-		if (l[place] >= a&&r[place] <= b) {
-			if (is_min)ret = min(ret, v[place]);
-			else ret = max(ret, v[place]);
-			return;
-		}
-		if (l[place]>b || r[place]<a) return;
-		RMQ(a, b, place * 2);
-		RMQ(a, b, place * 2 + 1);
-		return;
-	}
 public:
-	void Left(int place) {
-		if (place >= v.size() / 2) {
-			l[place] = place - v.size() / 2;
-			return;
-		}
-		Left(place * 2);
-		Left(place * 2 + 1);
-		l[place] = l[place * 2];
-		return;
-	}
-	void Right(int place) {
-		if (place >= v.size() / 2) {
-			r[place] = place - v.size() / 2;
-			return;
-		}
-		Right(place * 2);
-		Right(place * 2 + 1);
-		r[place] = r[place * 2 + 1];
-		return;
-	}
 	Segment_Tree(int n, bool min) {
 		n++;
 		num = 1;
 		while (num < n * 2) {
 			num *= 2;
 		}
-		l.resize(num);
-		r.resize(num);
 		is_min = min;
 		if (min) {
 			v.resize(num, MOD*MOD);
 		}
 		else v.resize(num, -MOD*MOD);
-		Left(1);
-		Right(1);
 	}
 	void Insert(int place, long long int num, bool update) {
 		place += v.size() / 2;
@@ -81,7 +44,20 @@ public:
 	long long int RMQ(int a, int b) {
 		if (is_min)ret = LLONG_MAX;
 		else ret = LLONG_MIN;
-		RMQ(a, b, 1);
+		if (is_min) {
+			b++;
+			for (a += num / 2, b += num / 2; a < b; a >>= 1, b >>= 1) {
+				if (a & 1)ret = min(ret, v[a++]);
+				if (b & 1)ret = min(ret, v[--b]);
+			}
+		}
+		else {
+			b++;
+			for (a += num / 2, b += num / 2; a < b; a >>= 1, b >>= 1) {
+				if (a & 1)ret = max(ret, v[a++]);
+				if (b & 1)ret = max(ret, v[--b]);
+			}
+		}
 		return ret;
 	}
 };
