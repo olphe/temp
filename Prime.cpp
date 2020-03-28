@@ -6,7 +6,7 @@ vector<int> Prime(int num) {
 		bool flag = true;
 		for (int j = 2; j < ret.size(); j++) {
 			if (ret[j] * ret[j] > i)break;
-			if (i%j == 0) {
+			if (i%ret[j] == 0) {
 				flag = false;
 				break;
 			}
@@ -15,7 +15,7 @@ vector<int> Prime(int num) {
 		flag = true;
 		for (int j = 2; j < ret.size(); j++) {
 			if (ret[j] * ret[j] > i + 2)break;
-			if ((i + 2) % j == 0) {
+			if ((i + 2) % ret[j] == 0) {
 				flag = false;
 				break;
 			}
