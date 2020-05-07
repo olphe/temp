@@ -78,7 +78,7 @@ private:
 		cnt = 0;
 		for (auto &i : converter)i.second = cnt++;
 		for (int i = 0; i < num; i++) {
-			for (auto j : edge[i]) {//Ž©ŒÈ•ÓÁ‚µ‚½‚¢‚Æ‚«‚Í‚±‚±‚¢‚¶‚é
+			for (auto j : edge[i]) {// if you want delete jiko loop , ijiru this loop
 				new_edge[converter[second_DFS[first_DFS[i]]]].push_back(converter[second_DFS[first_DFS[j]]]);
 			}
 		}
