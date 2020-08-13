@@ -5,7 +5,7 @@ struct Edge {
 	unsigned long long int rev_index;
 };
 
-class Min_Cost_Flow {//’´’¸“_‚ð–Y‚ê‚È‚¢
+class Min_Cost_Flow {
 	int n;
 	bool d;
 	vector<vector<Edge>>edge;
