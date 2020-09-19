@@ -1,3 +1,4 @@
+
 struct  Point {
 	long double x;
 	long double y;
@@ -71,10 +72,14 @@ bool LineCross(Point a1, Point a2, Point b1, Point b2) {
 	return cross(a2 - a1, b1 - a1)*cross(a2 - a1, b2 - a1) < EPS&&cross(b2 - b1, a1 - b1)*cross(b2 - b1, a2 - b1) < EPS && !(abs((a1 - a2).x*(a1 - b1).y - (a1 - a2).y*(a1 - b1).x)<EPS && abs((a1 - a2).x*(a1 - b2).y - (a1 - a2).y*(a1 - b2).x)<EPS&&abs(Distance(a1, a2) - Distance(a1, b1) - Distance(a2, b1)) > EPS&&abs(Distance(a1, a2) - Distance(a2, b2) - Distance(a1, b2)) > EPS&&abs(Distance(b1, b2) - Distance(a1, b1) - Distance(a1, b2)) > EPS&&abs(Distance(b1, b2) - Distance(a2, b1) - Distance(a2, b2)) > EPS);
 }
 
+long double Distance(pair<Point, Point>a, pair<Point, Point>b) {
+	if (LineCross(a.first, a.second, b.first, b.second))return 0;
+	return min({ Distance(a.first,b),Distance(a.second,b),Distance(b.first,a),Distance(b.second,a) });
+}
+
 Point LineCross(Line a, Line b) {
 	Point ret;
 	ret.x = (a.c*b.b - a.b*b.c) / (a.a*b.b - a.b*b.a);
 	ret.y = -(a.c*b.a - a.a*b.c) / (a.a*b.b - a.b*b.a);
 	return ret;
 }
-
