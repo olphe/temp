@@ -1,4 +1,3 @@
-
 struct  Point {
 	long double x;
 	long double y;
@@ -81,5 +80,108 @@ Point LineCross(Line a, Line b) {
 	Point ret;
 	ret.x = (a.c*b.b - a.b*b.c) / (a.a*b.b - a.b*b.a);
 	ret.y = -(a.c*b.a - a.a*b.c) / (a.a*b.b - a.b*b.a);
+	return ret;
+}
+
+long double TriangleArea(Point a, Point b, Point c) {
+	long double A, B, C;
+	A = Distance(a, b);
+	B = Distance(a, c);
+	C = Distance(b, c);
+	long double S = (A + B + C) / 2;
+	return sqrt(S*(S - A)*(S - B)*(S - C));
+}
+
+bool IsPointLeft(pair<Point, Point>a, Point b) {
+	a.second = a.second - a.first;
+	b = b - a.first;
+	a.first = a.first - a.first;
+	long double radline = atan2(a.second.y, a.second.x);
+	long double radpoint = atan2(b.y, b.x) - radline;
+	if (sin(radpoint) >= -EPS)return true;
+	else return false;
+}
+
+bool IsPointInPolygon(Point p, vector<Point>poly) {
+	bool ret = true;
+	for (int i = 0; i < poly.size(); i++) {
+		if (Distance(p, { poly[i],poly[(i + 1) % poly.size()] }) <= EPS) return true;
+		ret &= IsPointLeft({ poly[i],poly[(i + 1) % poly.size()] }, p);
+	}
+	return ret;
+}
+
+long double Area(vector<Point>p) {
+	long double ret = 0;
+	for (int i = 2; i < p.size(); i++) {
+		ret += TriangleArea(p[0], p[i - 1], p[i]);
+	}
+	return ret;
+}
+
+vector<vector<Point>>DividePolygonByLine(vector<Point>p, pair<Point, Point>l) {
+	vector<int>cr;
+	vector<Point>cp;
+	for (int k = 0; k < p.size(); k++) {
+		int nx = k + 1;
+		nx %= p.size();
+		if (LineCross(p[k], p[(k + 1) % p.size()], l.first, l.second)) {
+			auto np = LineCross(Line(p[k], p[(k + 1) % p.size()]), Line(l.first, l.second));
+			bool flag = true;
+			for (auto l : cp) {
+				if (Distance(l, np) <= EPS)flag = false;
+			}
+			if (flag) {
+				cr.push_back(k);
+				cp.push_back(np);
+			}
+		}
+	}
+	vector<Point>w;
+	vector<Point>x;
+	if (cr.size() != 2)return vector<vector<Point>>(1, p);
+	int cnt = cr[0];
+	do {
+		if (w.empty() || Distance(w.back(), p[cnt]) > EPS)w.push_back(p[cnt]);
+		if (cnt == cr[0]) {
+			if (w.empty() || Distance(w.back(), cp[0]) > EPS)w.push_back(cp[0]);
+			if (w.empty() || Distance(w.back(), cp[1]) > EPS)w.push_back(cp[1]);
+			cnt = cr[1] + 1;
+			cnt %= p.size();
+		}
+		else if (cnt == cr[1]) {
+			if (w.empty() || Distance(w.back(), cp[1]) > EPS)w.push_back(cp[1]);
+			if (w.empty() || Distance(w.back(), cp[0]) > EPS)w.push_back(cp[0]);
+			cnt = cr[0] + 1;
+			cnt %= p.size();
+		}
+		else {
+			cnt++;
+			cnt %= p.size();
+		}
+	} while (cnt != cr[0]);
+	cnt = cr[1];
+	do {
+		if (x.empty() || Distance(x.back(), p[cnt]) > EPS)x.push_back(p[cnt]);
+		if (cnt == cr[0]) {
+			if (x.empty() || Distance(x.back(), cp[0]) > EPS)x.push_back(cp[0]);
+			if (x.empty() || Distance(x.back(), cp[1]) > EPS)x.push_back(cp[1]);
+			cnt = cr[1] + 1;
+			cnt %= p.size();
+		}
+		else if (cnt == cr[1]) {
+			if (x.empty() || Distance(x.back(), cp[1]) > EPS)x.push_back(cp[1]);
+			if (x.empty() || Distance(x.back(), cp[0]) > EPS)x.push_back(cp[0]);
+			cnt = cr[0] + 1;
+			cnt %= p.size();
+		}
+		else {
+			cnt++;
+			cnt %= p.size();
+		}
+	} while (cnt != cr[1]);
+	vector<vector<Point>>ret;
+	ret.push_back(w);
+	ret.push_back(x);
 	return ret;
 }
