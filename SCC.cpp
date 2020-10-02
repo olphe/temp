@@ -1,5 +1,7 @@
-struct StronglyConnectedComponents {// can loop 
+
+struct StronglyConnectedComponents {
 	vector<vector<int>>new_edge;
+	vector<int>new_node;
 	StronglyConnectedComponents(const vector<vector<int>>&edge) {
 		Initialize(edge);
 		Compose_Reverse_Edge(edge);
@@ -26,6 +28,7 @@ private:
 		rev_edge.resize(num);
 		first_DFS.resize(num);
 		second_DFS.resize(num);
+		new_node.resize(num);
 	}
 	void Compose_Reverse_Edge(const vector<vector<int>>&edge) {
 		for (int i = 0; i < num; i++) {
@@ -78,8 +81,11 @@ private:
 		cnt = 0;
 		for (auto &i : converter)i.second = cnt++;
 		for (int i = 0; i < num; i++) {
-			for (auto j : edge[i]) {// if you want delete jiko loop , ijiru this loop
-				new_edge[converter[second_DFS[first_DFS[i]]]].push_back(converter[second_DFS[first_DFS[j]]]);
+			new_node[i] = converter[second_DFS[first_DFS[i]]];
+		}
+		for (int i = 0; i < num; i++) {
+			for (auto j : edge[i]) {// if you want jiko loop , ijiru this loop
+				if (new_node[i] != new_node[j])new_edge[new_node[i]].push_back(new_node[j]);
 			}
 		}
 		for (int i = 0; i < new_edge.size(); i++) {
