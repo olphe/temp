@@ -217,11 +217,58 @@ vector<Point>CircleCross(Circle a, Circle b) {
 	if (abs(abs(a.r - b.r) - dis) <= EPS) {
 		ret.push_back(ap + dp * (a.r / (a.r - b.r)));
 	}
-	long double ad, bd;
+	long double ad;
 	ad = (a.r*a.r - b.r*b.r + dis * dis) / 2 / dis;
 	Point cp = ap + dp * (ad / dis);
 	long double amari = sqrt(a.r*a.r - ad * ad);
 	ret.push_back(cp + Point(-dp.y, dp.x)*(amari / dis));
 	ret.push_back(cp - Point(-dp.y, dp.x)*(amari / dis));
+	return ret;
+}
+
+vector<pair<Point, Point>>Common_Tangent(Circle a, Circle b, long double inf) {
+	long double pi = acos(-1);
+	Point ap = Point(a.x, a.y);
+	Point bp = Point(b.x, b.y);
+	Point dp = bp - ap;
+	vector<pair<Point, Point>>ret;
+	long double rad = atan2(dp.y, dp.x);
+	long double d = hypot(dp.y, dp.x);
+	if (a.r + b.r <= d) {
+		long double newrad = asin((a.r + b.r) / d);
+		{
+			long double fd = hypot(inf, a.r);
+			long double lrad = atan2(a.r, -inf);
+			long double rrad = atan2(a.r, inf);
+			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			ret.push_back({ l.first + ap,l.second + ap });
+		}
+		newrad *= -1;
+		{
+			long double fd = hypot(inf, -a.r);
+			long double lrad = atan2(-a.r, -inf);
+			long double rrad = atan2(-a.r, inf);
+			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			ret.push_back({ l.first + ap,l.second + ap });
+		}
+	}
+	if (abs(a.r - b.r) <= d) {
+		long double newrad = asin(abs(a.r - b.r) / d);
+		{
+			long double fd = hypot(inf, a.r);
+			long double lrad = atan2(a.r, -inf);
+			long double rrad = atan2(a.r, inf);
+			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			ret.push_back({ l.first + ap,l.second + ap });
+		}
+		newrad *= -1;
+		{
+			long double fd = hypot(inf, -a.r);
+			long double lrad = atan2(-a.r, -inf);
+			long double rrad = atan2(-a.r, inf);
+			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			ret.push_back({ l.first + ap,l.second + ap });
+		}
+	}
 	return ret;
 }
