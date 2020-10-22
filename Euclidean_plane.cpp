@@ -18,6 +18,12 @@ struct  Point {
 		box.y = y - c.y;
 		return box;
 	}
+	Point operator * (const long double& b)const {
+		Point box;
+		box.x = x * b;
+		box.y = y * b;
+		return box;
+	}
 };
 
 struct Line {
@@ -183,5 +189,39 @@ vector<vector<Point>>DividePolygonByLine(vector<Point>p, pair<Point, Point>l) {
 	vector<vector<Point>>ret;
 	ret.push_back(w);
 	ret.push_back(x);
+	return ret;
+}
+
+struct Circle {
+	long double x, y, r;
+	void Input() {
+		cin >> x >> y >> r;
+	}
+	bool operator==(const Circle&c)const {
+		return x == c.x&&y == c.y&&r == c.r;
+	}
+};
+
+vector<Point>CircleCross(Circle a, Circle b) {
+	vector<Point>ret;
+	Point ap(a.x, a.y);
+	Point bp(b.x, b.y);
+	Point dp = bp - ap;
+	auto dis = Distance(ap, bp);
+	if (a == b)return ret;
+	if (a.r + b.r < Distance(ap, bp))return ret;
+	if (abs(a.r + b.r - dis) <= EPS) {
+		ret.push_back(ap + dp * (a.r / (a.r + b.r)));
+		return ret;
+	}
+	if (abs(abs(a.r - b.r) - dis) <= EPS) {
+		ret.push_back(ap + dp * (a.r / (a.r - b.r)));
+	}
+	long double ad, bd;
+	ad = (a.r*a.r - b.r*b.r + dis * dis) / 2 / dis;
+	Point cp = ap + dp * (ad / dis);
+	long double amari = sqrt(a.r*a.r - ad * ad);
+	ret.push_back(cp + Point(-dp.y, dp.x)*(amari / dis));
+	ret.push_back(cp - Point(-dp.y, dp.x)*(amari / dis));
 	return ret;
 }
