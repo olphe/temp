@@ -24,6 +24,21 @@ struct  Point {
 		box.y = y * b;
 		return box;
 	}
+	bool operator <(const Point& c)const {
+		if (y < c.y)return true;
+		if (y > c.y)return false;
+		if (x < c.x)return true;
+		return false;
+	}
+	bool operator >(const Point& c)const {
+		if (y > c.y)return true;
+		if (y < c.y)return false;
+		if (x > c.x)return true;
+		return false;
+	}
+	long double det(Point a) {
+		return x * a.y - y * a.x;
+	}
 };
 
 struct Line {
@@ -59,6 +74,7 @@ long double Distance(Point a, Point b) {
 long double Distance(Point a, pair<Point, Point>b) {
 	Line l = Line(b.first, b.second);
 	if (abs(l.a*a.x + l.b*a.y - l.c) < EPS) {
+		if (abs(Distance(a, b.first) + Distance(a, b.second) - Distance(b.second, b.first)) <= sqrt(EPS))return 0;
 		return min(Distance(a, b.first), Distance(a, b.second));
 	}
 	long double A = pow((b.first.x - b.second.x), 2) + pow((b.first.y - b.second.y), 2);
@@ -272,3 +288,50 @@ vector<pair<Point, Point>>Common_Tangent(Circle a, Circle b, long double inf) {
 	}
 	return ret;
 }
+
+struct Convex_hull {
+	vector<Point>node;
+	vector<Point>ret;
+	bool line;
+	Convex_hull(bool l) {
+		line = l;
+	}
+	void Add_node(Point n) {
+		node.push_back(n);
+	}
+	vector<Point>solve() {
+		sort(node.begin(), node.end());
+		int index = 0;
+		int num = node.size();
+		ret.resize(num * 2);
+		for (int i = 0; i < num; i++) {
+			if (line) {
+				while (index > 1 && (ret[index - 1] - ret[index - 2]).det(node[i] - ret[index - 1]) < -EPS) {
+					index--;
+				}
+			}
+			else {
+				while (index > 1 && (ret[index - 1] - ret[index - 2]).det(node[i] - ret[index - 1]) < EPS) {
+					index--;
+				}
+			}
+			ret[index++] = node[i];
+		}
+		int box = index;
+		for (int i = num - 2; i >= 0; i--) {
+			if (line) {
+				while (index > box && (ret[index - 1] - ret[index - 2]).det(node[i] - ret[index - 1]) < -EPS) {
+					index--;
+				}
+			}
+			else {
+				while (index > box && (ret[index - 1] - ret[index - 2]).det(node[i] - ret[index - 1]) < EPS) {
+					index--;
+				}
+			}
+			ret[index++] = node[i];
+		}
+		ret.resize(index - 1);
+		return ret;
+	}
+};
