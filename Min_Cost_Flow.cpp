@@ -8,12 +8,12 @@ struct Edge {
 class Min_Cost_Flow {
 	int n;
 	bool d;
-	vector<vector<Edge>>edge;
 	vector<long long int>potent;
 	vector<long long int>dist;
 	vector<int>pre_node;
 	vector<int>pre_edge;
 public:
+	vector<vector<Edge>>edge;
 	Min_Cost_Flow(int node, bool directed) {
 		node += 2;
 		n = node;
@@ -27,7 +27,7 @@ public:
 		return;
 	}
 	void Add_Edge(int s, int g, long long int cap, long long int cost) {
-		if (!d) {
+		if (d) {
 			edge[s].push_back({ g,cap,cost,edge[g].size() });
 			edge[g].push_back({ s,0,-cost ,edge[s].size() - 1 });
 		}
