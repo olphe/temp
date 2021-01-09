@@ -54,7 +54,7 @@ public:
 		if (v == g) {
 			return ret;
 		}
-		for (int i = index[v]; i < edge[v].size(); i++) {
+		for (int &i = index[v]; i < edge[v].size(); i++) {
 			if (edge[v][i].max_flow > 0 && depth[v] < depth[edge[v][i].to]) {
 				long long int d = max_flow(edge[v][i].to, g, min(ret, edge[v][i].max_flow));
 				if (d > 0) {
