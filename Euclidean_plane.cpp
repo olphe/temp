@@ -5,6 +5,10 @@ struct  Point {
 		x = xx, y = yy;
 	}
 	Point() {
+
+	}
+	void Input() {
+		cin >> x >> y;
 	}
 	Point operator + (const Point& c)const {
 		Point box;
@@ -35,6 +39,9 @@ struct  Point {
 		if (y < c.y)return false;
 		if (x > c.x)return true;
 		return false;
+	}
+	bool operator ==(const Point& c)const {
+		return abs(x - c.x) <= EPS && abs(y - c.y) <= EPS;
 	}
 	long double det(Point a) {
 		return x * a.y - y * a.x;
@@ -209,19 +216,40 @@ vector<vector<Point>>DividePolygonByLine(vector<Point>p, pair<Point, Point>l) {
 }
 
 struct Circle {
-	long double x, y, r;
+	Point p;
+	long double r;
 	void Input() {
-		cin >> x >> y >> r;
+		p.Input();
+		cin >> r;
 	}
 	bool operator==(const Circle&c)const {
-		return x == c.x&&y == c.y&&r == c.r;
+		return p.x == c.p.x&&p.y == c.p.y&&r == c.r;
 	}
 };
 
+Circle FindCircle(Point a, Point b, Point c) {
+	Circle ret;
+	ret.p.x = 0, ret.p.y = 0, ret.r = -1;
+	if (a == b)return ret;
+	if (a == c)return ret;
+	if (c == b)return ret;
+	auto ac = c - a;
+	auto ab = b - a;
+	if ((ac.y*ab.x - ab.y*ac.x) <= EPS)return ret;
+	swap(ab.x, ab.y);
+	ab.x *= -1;
+	swap(ac.x, ac.y);
+	ac.x *= -1;
+	auto p = LineCross(Line((a + b)*0.5, (a + b)*0.5 + ab), Line((a + c)*0.5, (a + c)*0.5 + ac));
+	ret.p.x = p.x, ret.p.y = p.y;
+	ret.r = Distance(p, a);
+	return ret;
+}
+
 vector<Point>CircleCross(Circle a, Circle b) {
 	vector<Point>ret;
-	Point ap(a.x, a.y);
-	Point bp(b.x, b.y);
+	Point ap(a.p.x, a.p.y);
+	Point bp(b.p.x, b.p.y);
 	Point dp = bp - ap;
 	auto dis = Distance(ap, bp);
 	if (a == b)return ret;
@@ -244,8 +272,8 @@ vector<Point>CircleCross(Circle a, Circle b) {
 
 vector<pair<Point, Point>>Common_Tangent(Circle a, Circle b, long double inf) {
 	long double pi = acos(-1);
-	Point ap = Point(a.x, a.y);
-	Point bp = Point(b.x, b.y);
+	Point ap = Point(a.p.x, a.p.y);
+	Point bp = Point(b.p.x, b.p.y);
 	Point dp = bp - ap;
 	vector<pair<Point, Point>>ret;
 	long double rad = atan2(dp.y, dp.x);
