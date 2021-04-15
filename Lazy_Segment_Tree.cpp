@@ -104,7 +104,7 @@ class Segment_Tree {
 			else ret = max(ret, v[place] + add[place]);
 			return;
 		}
-		if (l[place]>b || r[place]<a) return;
+		if (l[place] > b || r[place] < a) return;
 		if (modi[place] != LLONG_MAX) {
 			modi[place * 2] = modi[place * 2 + 1] = modi[place];
 			v[place * 2] = v[place * 2 + 1] = modi[place];
@@ -131,11 +131,11 @@ public:
 		r.resize(num);
 		is_min = min;
 		if (min) {
-			v.resize(num, MOD*MOD);
+			v.resize(num, MOD * MOD);
 		}
-		else v.resize(num, -MOD*MOD);
+		else v.resize(num, -MOD * MOD);
 		add.resize(num, 0);
-		modi.resize(num, MOD*MOD);
+		modi.resize(num, LLONG_MAX);
 		Left(1);
 		Right(1);
 	}
