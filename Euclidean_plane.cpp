@@ -62,30 +62,30 @@ struct Line {
 			b = 1;
 			a = (t.y - s.y) / (s.x - t.x);
 		}
-		c = s.x*a + s.y*b;
+		c = s.x * a + s.y * b;
 	}
 };
 
 long double dot(Point a, Point b) {
-	return a.x*b.x + a.y*b.y;
+	return a.x * b.x + a.y * b.y;
 }
 
 long double cross(Point a, Point b) {
-	return a.x*b.y - b.x*a.y;
+	return a.x * b.y - b.x * a.y;
 }
 
 long double Distance(Point a, Point b) {
-	return sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
+	return sqrtl((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
 
 long double Distance(Point a, pair<Point, Point>b) {
 	Line l = Line(b.first, b.second);
-	if (abs(l.a*a.x + l.b*a.y - l.c) < EPS) {
-		if (abs(Distance(a, b.first) + Distance(a, b.second) - Distance(b.second, b.first)) <= sqrt(EPS))return 0;
+	if (abs(l.a * a.x + l.b * a.y - l.c) < EPS) {
+		if (abs(Distance(a, b.first) + Distance(a, b.second) - Distance(b.second, b.first)) <= sqrtl(EPS))return 0;
 		return min(Distance(a, b.first), Distance(a, b.second));
 	}
-	long double A = pow((b.first.x - b.second.x), 2) + pow((b.first.y - b.second.y), 2);
-	long double B = 2 * (a.x - b.first.x)*(b.first.x - b.second.x) + 2 * (a.y - b.first.y)*(b.first.y - b.second.y);
+	long double A = powl((b.first.x - b.second.x), 2) + powl((b.first.y - b.second.y), 2);
+	long double B = 2 * (a.x - b.first.x) * (b.first.x - b.second.x) + 2 * (a.y - b.first.y) * (b.first.y - b.second.y);
 	long double r = B / 2 / A;
 	r = -r;
 	if (r >= 0 && r <= 1) {
@@ -97,7 +97,7 @@ long double Distance(Point a, pair<Point, Point>b) {
 }
 
 bool LineCross(Point a1, Point a2, Point b1, Point b2) {
-	return cross(a2 - a1, b1 - a1)*cross(a2 - a1, b2 - a1) < EPS&&cross(b2 - b1, a1 - b1)*cross(b2 - b1, a2 - b1) < EPS && !(abs((a1 - a2).x*(a1 - b1).y - (a1 - a2).y*(a1 - b1).x)<EPS && abs((a1 - a2).x*(a1 - b2).y - (a1 - a2).y*(a1 - b2).x)<EPS&&abs(Distance(a1, a2) - Distance(a1, b1) - Distance(a2, b1)) > EPS&&abs(Distance(a1, a2) - Distance(a2, b2) - Distance(a1, b2)) > EPS&&abs(Distance(b1, b2) - Distance(a1, b1) - Distance(a1, b2)) > EPS&&abs(Distance(b1, b2) - Distance(a2, b1) - Distance(a2, b2)) > EPS);
+	return cross(a2 - a1, b1 - a1) * cross(a2 - a1, b2 - a1) < EPS && cross(b2 - b1, a1 - b1) * cross(b2 - b1, a2 - b1) < EPS && !(abs((a1 - a2).x * (a1 - b1).y - (a1 - a2).y * (a1 - b1).x) < EPS && abs((a1 - a2).x * (a1 - b2).y - (a1 - a2).y * (a1 - b2).x) < EPS && abs(Distance(a1, a2) - Distance(a1, b1) - Distance(a2, b1)) > EPS && abs(Distance(a1, a2) - Distance(a2, b2) - Distance(a1, b2)) > EPS && abs(Distance(b1, b2) - Distance(a1, b1) - Distance(a1, b2)) > EPS && abs(Distance(b1, b2) - Distance(a2, b1) - Distance(a2, b2)) > EPS);
 }
 
 long double Distance(pair<Point, Point>a, pair<Point, Point>b) {
@@ -107,8 +107,8 @@ long double Distance(pair<Point, Point>a, pair<Point, Point>b) {
 
 Point LineCross(Line a, Line b) {
 	Point ret;
-	ret.x = (a.c*b.b - a.b*b.c) / (a.a*b.b - a.b*b.a);
-	ret.y = -(a.c*b.a - a.a*b.c) / (a.a*b.b - a.b*b.a);
+	ret.x = (a.c * b.b - a.b * b.c) / (a.a * b.b - a.b * b.a);
+	ret.y = -(a.c * b.a - a.a * b.c) / (a.a * b.b - a.b * b.a);
 	return ret;
 }
 
@@ -118,16 +118,16 @@ long double TriangleArea(Point a, Point b, Point c) {
 	B = Distance(a, c);
 	C = Distance(b, c);
 	long double S = (A + B + C) / 2;
-	return sqrt(S*(S - A)*(S - B)*(S - C));
+	return sqrtl(S * (S - A) * (S - B) * (S - C));
 }
 
 bool IsPointLeft(pair<Point, Point>a, Point b) {
 	a.second = a.second - a.first;
 	b = b - a.first;
 	a.first = a.first - a.first;
-	long double radline = atan2(a.second.y, a.second.x);
-	long double radpoint = atan2(b.y, b.x) - radline;
-	if (sin(radpoint) >= -EPS)return true;
+	long double radline = atan2l(a.second.y, a.second.x);
+	long double radpoint = atan2l(b.y, b.x) - radline;
+	if (sinl(radpoint) >= -EPS)return true;
 	else return false;
 }
 
@@ -222,8 +222,8 @@ struct Circle {
 		p.Input();
 		cin >> r;
 	}
-	bool operator==(const Circle&c)const {
-		return p.x == c.p.x&&p.y == c.p.y&&r == c.r;
+	bool operator==(const Circle& c)const {
+		return p.x == c.p.x && p.y == c.p.y && r == c.r;
 	}
 };
 
@@ -235,12 +235,12 @@ Circle FindCircle(Point a, Point b, Point c) {
 	if (c == b)return ret;
 	auto ac = c - a;
 	auto ab = b - a;
-	if ((ac.y*ab.x - ab.y*ac.x) <= EPS)return ret;
+	if ((ac.y * ab.x - ab.y * ac.x) <= EPS)return ret;
 	swap(ab.x, ab.y);
 	ab.x *= -1;
 	swap(ac.x, ac.y);
 	ac.x *= -1;
-	auto p = LineCross(Line((a + b)*0.5, (a + b)*0.5 + ab), Line((a + c)*0.5, (a + c)*0.5 + ac));
+	auto p = LineCross(Line((a + b) * 0.5, (a + b) * 0.5 + ab), Line((a + c) * 0.5, (a + c) * 0.5 + ac));
 	ret.p.x = p.x, ret.p.y = p.y;
 	ret.r = Distance(p, a);
 	return ret;
@@ -262,11 +262,11 @@ vector<Point>CircleCross(Circle a, Circle b) {
 		ret.push_back(ap + dp * (a.r / (a.r - b.r)));
 	}
 	long double ad;
-	ad = (a.r*a.r - b.r*b.r + dis * dis) / 2 / dis;
+	ad = (a.r * a.r - b.r * b.r + dis * dis) / 2 / dis;
 	Point cp = ap + dp * (ad / dis);
-	long double amari = sqrt(a.r*a.r - ad * ad);
-	ret.push_back(cp + Point(-dp.y, dp.x)*(amari / dis));
-	ret.push_back(cp - Point(-dp.y, dp.x)*(amari / dis));
+	long double amari = sqrtl(a.r * a.r - ad * ad);
+	ret.push_back(cp + Point(-dp.y, dp.x) * (amari / dis));
+	ret.push_back(cp - Point(-dp.y, dp.x) * (amari / dis));
 	return ret;
 }
 
@@ -276,33 +276,33 @@ vector<pair<Point, Point>>Common_Tangent(Circle a, Circle b, long double inf) {
 	Point bp = Point(b.p.x, b.p.y);
 	Point dp = bp - ap;
 	vector<pair<Point, Point>>ret;
-	long double rad = atan2(dp.y, dp.x);
-	long double d = hypot(dp.y, dp.x);
+	long double rad = atan2l(dp.y, dp.x);
+	long double d = hypotl(dp.y, dp.x);
 	if (a.r + b.r <= d) {
-		long double newrad = asin((a.r + b.r) / d);
+		long double newrad = asinl((a.r + b.r) / d);
 		{
-			long double fd = hypot(inf, a.r);
-			long double lrad = atan2(a.r, -inf);
-			long double rrad = atan2(a.r, inf);
-			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			long double fd = hypotl(inf, a.r);
+			long double lrad = atan2l(a.r, -inf);
+			long double rrad = atan2l(a.r, inf);
+			pair<Point, Point>l = { Point(fd * cosl(lrad + rad - newrad),fd * sinl(lrad + rad - newrad)),Point(fd * cosl(rrad + rad - newrad),fd * sinl(rrad + rad - newrad)) };
 			ret.push_back({ l.first + ap,l.second + ap });
 		}
 		newrad *= -1;
 		{
-			long double fd = hypot(inf, -a.r);
-			long double lrad = atan2(-a.r, -inf);
-			long double rrad = atan2(-a.r, inf);
-			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			long double fd = hypotl(inf, -a.r);
+			long double lrad = atan2l(-a.r, -inf);
+			long double rrad = atan2l(-a.r, inf);
+			pair<Point, Point>l = { Point(fd * cosl(lrad + rad - newrad),fd * sinl(lrad + rad - newrad)),Point(fd * cosl(rrad + rad - newrad),fd * sinl(rrad + rad - newrad)) };
 			ret.push_back({ l.first + ap,l.second + ap });
 		}
 	}
 	if (abs(a.r - b.r) <= d) {
-		long double newrad = asin(abs(a.r - b.r) / d);
+		long double newrad = asinl(abs(a.r - b.r) / d);
 		{
-			long double fd = hypot(inf, a.r);
-			long double lrad = atan2(a.r, -inf);
-			long double rrad = atan2(a.r, inf);
-			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			long double fd = hypotl(inf, a.r);
+			long double lrad = atan2l(a.r, -inf);
+			long double rrad = atan2l(a.r, inf);
+			pair<Point, Point>l = { Point(fd * cosl(lrad + rad - newrad),fd * sinl(lrad + rad - newrad)),Point(fd * cosl(rrad + rad - newrad),fd * sinl(rrad + rad - newrad)) };
 			ret.push_back({ l.first + ap,l.second + ap });
 		}
 		newrad *= -1;
@@ -310,7 +310,7 @@ vector<pair<Point, Point>>Common_Tangent(Circle a, Circle b, long double inf) {
 			long double fd = hypot(inf, -a.r);
 			long double lrad = atan2(-a.r, -inf);
 			long double rrad = atan2(-a.r, inf);
-			pair<Point, Point>l = { Point(fd*cos(lrad + rad - newrad),fd*sin(lrad + rad - newrad)),Point(fd*cos(rrad + rad - newrad),fd*sin(rrad + rad - newrad)) };
+			pair<Point, Point>l = { Point(fd * cosl(lrad + rad - newrad),fd * sinl(lrad + rad - newrad)),Point(fd * cosl(rrad + rad - newrad),fd * sinl(rrad + rad - newrad)) };
 			ret.push_back({ l.first + ap,l.second + ap });
 		}
 	}
