@@ -271,7 +271,7 @@ vector<Point>CircleCross(Circle a, Circle b) {
 }
 
 vector<pair<Point, Point>>Common_Tangent(Circle a, Circle b, long double inf) {
-	long double pi = acos(-1);
+	long double pi = acosl(-1);
 	Point ap = Point(a.p.x, a.p.y);
 	Point bp = Point(b.p.x, b.p.y);
 	Point dp = bp - ap;
