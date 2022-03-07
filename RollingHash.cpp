@@ -1,5 +1,8 @@
 struct RollingHash {
     unsigned long long int mod61 = (1LL << 61) - 1;
+    unsigned long long int CalcMod61(unsigned long long int num) {
+        return num % mod61;
+    }
     unsigned long long int Mul61(unsigned long long int a, unsigned long long int b) {
         unsigned long long int au = a >> 31;
         unsigned long long int ad = a ^ (au << 31);
@@ -11,10 +14,7 @@ struct RollingHash {
         unsigned long long int midu = mid >> 30;
         unsigned long long int midd = mid & ((1 << 30) - 1);
         ret += midu + (midd << 31);
-        return ret;
-    }
-    unsigned long long int CalcMod61(unsigned long long int num) {
-        return num % mod61;
+        return CalcMod61(ret);
     }
     int num;
     vector<unsigned long long int>h;
