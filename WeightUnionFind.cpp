@@ -24,17 +24,16 @@ public:
 		Find(node);
 		return ret;
 	}
-	void Unite(int u, int v, int c) {
+	bool Unite(int u, int v, int c) {
 		int ascore = Score(u);
 		int bscore = Score(v);
 		u = Find(u);
 		v = Find(v);
-		c += bscore - ascore;
-		if (u == v && ascore + c != bscore) {
-			cout << "!!!!!!!!" << endl;
-			return;
+		if (u == v && ascore - c != bscore) {
+			return false;
 		}
-		if (u == v)return;
+		c += bscore - ascore;
+		if (u == v)return true;
 		if (rank[u] < rank[v]) {
 			parent[u] = v;
 			score[u] = c;
@@ -44,6 +43,7 @@ public:
 			score[v] = -c;
 			if (rank[u] == rank[v])rank[u]++;
 		}
+		return true;
 	}
 	bool Check_Same(int u, int v) {
 		return Find(u) == Find(v);
