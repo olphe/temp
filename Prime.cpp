@@ -6,7 +6,7 @@ vector<int> Prime(int num) {
 		bool flag = true;
 		for (int j = 2; j < ret.size(); j++) {
 			if (ret[j] * ret[j] > i)break;
-			if (i%ret[j] == 0) {
+			if (i % ret[j] == 0) {
 				flag = false;
 				break;
 			}
@@ -22,5 +22,6 @@ vector<int> Prime(int num) {
 		}
 		if (flag)ret.push_back(i + 2);
 	}
+	while (ret.size() && ret.back() > num)ret.pop_back();
 	return ret;
 }
