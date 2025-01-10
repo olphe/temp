@@ -1,3 +1,5 @@
+const int inf = 1e9;
+
 class TwoEdgeConnectedComponents {
 	int num;
 	vector<vector<int>>edge;
@@ -5,14 +7,19 @@ class TwoEdgeConnectedComponents {
 	vector<int>dis;
 	vector<int>imos;
 	int root;
-	void FirstDFS(int node) {
+	vector<int>used;
+	void FirstDFS(int node, int p = -1) {
 		for (auto i : edge[node]) {
-			if (dis[i] == MOD) {
+			if (i == p) {
+				p = -1;
+				continue;
+			}
+			if (dis[i] == inf) {
 				parent[i] = node;
 				dis[i] = dis[node] + 1;
-				FirstDFS(i);
+				FirstDFS(i, node);
 			}
-			if (dis[i] < dis[node] - 1) {
+			if (dis[i] <= dis[node] - 1) {
 				imos[node]++;
 				imos[i]--;
 			}
@@ -26,7 +33,8 @@ class TwoEdgeConnectedComponents {
 			else comp[node] = node;
 		}
 		for (auto i : edge[node]) {
-			if (parent[i] == node) {
+			if (parent[i] == node&&!used[i]) {
+				used[i] = 1;
 				SecondDFS(i);
 			}
 		}
@@ -39,7 +47,9 @@ public:
 		parent.resize(num);
 		dis.resize(num);
 		imos.resize(num);
+		used.resize(num);
 		comp.resize(num, -1);
+		root = 0;
 	}
 	void Add_Edge(int a, int b) {
 		edge[a].push_back(b);
@@ -47,7 +57,7 @@ public:
 	}
 	void Build(int r) {
 		root = r;
-		for (auto &i : dis)i = MOD;
+		for (auto& i : dis)i = inf;
 		dis[root] = 0;
 		parent[root] = -1;
 		FirstDFS(root);
