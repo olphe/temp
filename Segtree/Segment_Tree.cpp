@@ -1,63 +1,50 @@
-class Segment_Tree {
-	vector<long long int>v;
-	int num;
-	long long int ret;
-	bool is_min;
-	long long int Update(int place) {
-		if (place >= v.size() / 2) {
-			return v[place];
-		}
-		if (is_min) {
-			v[place] = min(Update(place * 2), Update(place * 2 + 1));
-			return v[place];
-		}
-		v[place] = max(Update(place * 2), Update(place * 2 + 1));
-		return v[place];
-	}
+template <typename Monoid> class SegmentTree {
+	int sz;
+	vector<Monoid>v;
+	using F = function < Monoid(Monoid, Monoid) >;
+	F f;
+	Monoid id;
 public:
-	Segment_Tree(int n, bool min) {
-		n++;
-		num = 1;
-		while (num < n * 2) {
-			num *= 2;
+	SegmentTree(int n, F _f, Monoid _id) :f(_f), id(_id) {
+		sz = 1;
+		while (sz < n) {
+			sz <<= 1;
 		}
-		is_min = min;
-		if (min) {
-			v.resize(num, MOD*MOD);
-		}
-		else v.resize(num, -MOD*MOD);
+		v.assign(sz * 2, id);
 	}
-	void Insert(int place, long long int num, bool update) {
-		place += v.size() / 2;
-		v[place] = num;
-		if (!update)return;
-		place /= 2;
-		while (place) {
-			if (is_min)v[place] = min(v[place * 2], v[place * 2 + 1]);
-			else v[place] = max(v[place * 2], v[place * 2 + 1]);
-			place /= 2;
+	void Set(int p, Monoid x) {
+		p += sz;
+		v[p] = x;
+	}
+	void Build() {
+		for (int i = sz - 1;i > 0;i--) {
+			v[i] = f(v[i * 2], v[i * 2 + 1]);
 		}
 	}
-	void TopDown() {
-		Update(1);
+	void Update(int p, Monoid x) {
+		p += sz;
+		v[p] = x;
+		p >>= 1;
+		while (p) {
+			v[p] = f(v[p * 2], v[p * 2 + 1]);
+			p >>= 1;
+		}
 	}
-	long long int RMQ(int a, int b) {
-		if (is_min)ret = LLONG_MAX;
-		else ret = LLONG_MIN;
-		if (is_min) {
-			b++;
-			for (a += num / 2, b += num / 2; a < b; a >>= 1, b >>= 1) {
-				if (a & 1)ret = min(ret, v[a++]);
-				if (b & 1)ret = min(ret, v[--b]);
-			}
+	Monoid Query(int a, int b) { //[)
+		Monoid Lret = id;
+		Monoid Rret = id;
+		a += sz;
+		b += sz;
+		while (a < b) {
+			if (a & 1) Lret = f(Lret, v[a++]);
+			if (b & 1)Rret = f(v[--b], Rret);
+			a >>= 1;
+			b >>= 1;
 		}
-		else {
-			b++;
-			for (a += num / 2, b += num / 2; a < b; a >>= 1, b >>= 1) {
-				if (a & 1)ret = max(ret, v[a++]);
-				if (b & 1)ret = max(ret, v[--b]);
-			}
-		}
-		return ret;
+		return f(Lret, Rret);
+	}
+	Monoid operator[](int p) const
+	{
+		return v[p + sz];
 	}
 };
