@@ -17,7 +17,7 @@ public:
 		v[p] = x;
 	}
 	void Build() {
-		for (int i = sz - 1;i > 0;i--) {
+		for (int i = sz - 1; i > 0; i--) {
 			v[i] = f(v[i * 2], v[i * 2 + 1]);
 		}
 	}
@@ -46,5 +46,56 @@ public:
 	Monoid operator[](int p) const
 	{
 		return v[p + sz];
+	}
+	int MaxRight(int id, Monoid x, F g) {
+		int p = id + sz;
+		if (!g(x, v[p]))return id;
+		while (1) {
+			p++;
+			p >>= 1;
+			if (g(x, v[p])) {
+			}
+			else {
+				break;
+			}
+		}
+		while (1) {
+			p <<= 1;
+			if (p >= v.size())break;
+			if (g(x, v[p])) {
+				p |= 1;
+			}
+			else {
+
+			}
+		}
+		p >>= 1;
+		return p - sz;
+	}
+	int MinLeft(int id, Monoid x, F g) {
+		int p = id + sz;
+		if (!g(x, v[p]))return id;
+		while (1) {
+			p--;
+			p >>= 1;
+			if (g(x, v[p])) {
+			}
+			else {
+				break;
+			}
+		}
+		while (1) {
+			p <<= 1;
+			if (p >= v.size())break;
+			p |= 1;
+			if (g(x, v[p])) {
+				p ^= 1;
+			}
+			else {
+
+			}
+		}
+		p >>= 1;
+		return p - sz;
 	}
 };
